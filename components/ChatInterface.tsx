@@ -45,11 +45,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onStartBuilder }) => {
               </button>
         </div>
 
-        {/* Disclaimer / Footer */}
-        <p className="text-center text-zinc-600 text-xs mt-8">
-          Gemini can make mistakes, so double-check it.
-        </p>
-
       </div>
     </div>
   );
