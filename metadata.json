@@ -1,0 +1,5 @@
+{
+  "name": " PC Architect ",
+  "description": "An AI-powered PC builder wizard that replicates the requested UI and functionality, helping users build custom PCs with compatibility checks and Indian market pricing.",
+  "requestFramePermissions": []
+}
