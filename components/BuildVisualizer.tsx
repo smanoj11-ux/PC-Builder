@@ -1,6 +1,6 @@
 import React from 'react';
 import { BuildState, ComponentType } from '../types';
-import { Fan, Cpu, Disc, Power, HardDrive, Zap, CircuitBoard } from 'lucide-react';
+import { Fan, Cpu, Power, Zap, CircuitBoard } from 'lucide-react';
 
 interface BuildVisualizerProps {
   buildState: BuildState;
@@ -117,7 +117,7 @@ const BuildVisualizer: React.FC<BuildVisualizerProps> = ({ buildState }) => {
                     )}
 
                     {!hasPart(ComponentType.MOBO) && (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
                              {/* Background Grid Pattern */}
                              <div className="absolute inset-0 opacity-5" style={{backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '20px 20px'}}></div>
                              
@@ -127,15 +127,34 @@ const BuildVisualizer: React.FC<BuildVisualizerProps> = ({ buildState }) => {
                                  'bottom-6 left-6', 'bottom-6 right-6', 
                                  'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
                              ].map((pos, i) => (
-                                 <div key={i} className={`absolute w-2 h-2 rounded-full bg-yellow-900/40 ring-1 ring-yellow-700/30 ${pos}`}></div>
+                                 <div key={i} className={`absolute w-3 h-3 rounded-full bg-yellow-600/30 border border-yellow-600/50 ${pos}`}>
+                                     <div className="absolute inset-0.5 bg-yellow-600/50 rounded-full animate-pulse"></div>
+                                 </div>
                              ))}
 
-                             {/* Main Placeholder Label */}
-                             <div className="flex flex-col items-center gap-3 p-6 rounded-xl border border-dashed border-zinc-700 bg-zinc-900/50 backdrop-blur-sm shadow-xl">
-                                <CircuitBoard className="text-zinc-600 animate-pulse-slow" size={40} strokeWidth={1} />
-                                <div className="text-center">
-                                    <span className="block text-zinc-400 font-mono text-xs font-bold tracking-[0.2em] uppercase mb-1">Mainboard Area</span>
-                                    <span className="block text-[10px] text-zinc-600 font-medium tracking-wide">SELECT MOTHERBOARD TO BEGIN</span>
+                             {/* Main Placeholder Label - Enhanced */}
+                             <div className="relative group cursor-default">
+                                {/* Glowing backdrop */}
+                                <div className="absolute -inset-4 bg-blue-500/10 rounded-2xl blur-xl animate-pulse-slow group-hover:bg-blue-500/20 transition-all"></div>
+                                
+                                <div className="relative flex flex-col items-center gap-4 p-8 rounded-2xl border-2 border-dashed border-zinc-600 bg-zinc-900/90 backdrop-blur-md shadow-2xl transition-all group-hover:border-blue-500/50 group-hover:scale-105">
+                                    
+                                    {/* Corner Accents */}
+                                    <div className="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-zinc-500 rounded-tl group-hover:border-blue-400 transition-colors"></div>
+                                    <div className="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-zinc-500 rounded-tr group-hover:border-blue-400 transition-colors"></div>
+                                    <div className="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-zinc-500 rounded-bl group-hover:border-blue-400 transition-colors"></div>
+                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-zinc-500 rounded-br group-hover:border-blue-400 transition-colors"></div>
+
+                                    <div className="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700 shadow-inner group-hover:border-blue-500/30 group-hover:bg-zinc-800/80 transition-all">
+                                        <CircuitBoard className="text-zinc-500 group-hover:text-blue-400 transition-colors" size={32} strokeWidth={1.5} />
+                                    </div>
+                                    
+                                    <div className="text-center">
+                                        <span className="block text-zinc-300 font-mono text-sm font-bold tracking-[0.2em] uppercase mb-2 group-hover:text-white transition-colors">Motherboard Needed</span>
+                                        <span className="block text-[10px] text-zinc-500 font-medium tracking-wide bg-zinc-800/50 px-3 py-1 rounded-full border border-zinc-700/50 group-hover:border-blue-500/30 group-hover:text-blue-200 transition-colors">
+                                            CORE COMPONENT MISSING
+                                        </span>
+                                    </div>
                                 </div>
                              </div>
                         </div>
@@ -144,80 +163,147 @@ const BuildVisualizer: React.FC<BuildVisualizerProps> = ({ buildState }) => {
 
                 {/* Cable Visualization Layer (When PSU is connected) */}
                 {hasPart(ComponentType.PSU) && (
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" style={{ overflow: 'visible' }}>
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{ overflow: 'visible' }}>
                         <defs>
                             <linearGradient id="cable-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                                 <stop offset="0%" stopColor="#27272a" />
-                                <stop offset="50%" stopColor="#3f3f46" />
-                                <stop offset="100%" stopColor="#27272a" />
+                                <stop offset="40%" stopColor="#52525b" />
+                                <stop offset="60%" stopColor="#27272a" />
+                                <stop offset="100%" stopColor="#18181b" />
                             </linearGradient>
                             <filter id="cable-shadow">
-                                <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#000" floodOpacity="0.8"/>
+                                <feDropShadow dx="2" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.7"/>
                             </filter>
+                             <pattern id="cable-braid" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                                <line x1="0" y1="0" x2="0" y2="4" stroke="#000" strokeWidth="2" opacity="0.3" />
+                            </pattern>
                         </defs>
                         
-                        {/* 24-Pin ATX Cable (To Right Side of Mobo) */}
+                        {/* Background Grommets (Where cables emerge) */}
+                        <g opacity="0.6">
+                            {/* ATX Grommet */}
+                            <ellipse cx="85%" cy="50%" rx="2%" ry="8%" fill="#0a0a0a" stroke="#222" strokeWidth="1" />
+                            {/* GPU Power Grommet (Bottom) */}
+                            <ellipse cx="50%" cy="85%" rx="6%" ry="2%" fill="#0a0a0a" stroke="#222" strokeWidth="1" />
+                            {/* CPU Power Grommet (Top Left) */}
+                            <ellipse cx="15%" cy="5%" rx="4%" ry="2%" fill="#0a0a0a" stroke="#222" strokeWidth="1" />
+                        </g>
+
+                        {/* 24-Pin ATX Cable (Thick Main Power) */}
                         {hasPart(ComponentType.MOBO) && (
                             <g filter="url(#cable-shadow)" className="animate-scale-in">
+                                {/* Connector Head on Mobo */}
+                                <rect x="71%" y="42%" width="3%" height="15%" fill="#111" stroke="#333" rx="1" />
+                                
+                                {/* Main Bundle curving from Grommet (85%,50%) to Mobo (72%, 50%) */}
                                 <path 
-                                    d="M 80% 80% C 80% 65%, 75% 60%, 72% 50%" 
+                                    d="M 85% 50% C 80% 50%, 78% 50%, 74% 50%" 
                                     fill="none" 
                                     stroke="url(#cable-gradient)" 
-                                    strokeWidth="10" 
-                                    strokeLinecap="round"
+                                    strokeWidth="24" 
+                                    strokeLinecap="butt"
                                 />
-                                {/* Sleeving texture */}
-                                <path 
-                                    d="M 80% 80% C 80% 65%, 75% 60%, 72% 50%" 
+                                {/* Braiding Texture */}
+                                 <path 
+                                    d="M 85% 50% C 80% 50%, 78% 50%, 74% 50%" 
                                     fill="none" 
-                                    stroke="black" 
-                                    strokeWidth="10" 
-                                    strokeDasharray="2 3"
-                                    strokeOpacity="0.3"
+                                    stroke="url(#cable-braid)" 
+                                    strokeWidth="24" 
+                                    strokeLinecap="butt"
+                                    opacity="0.6"
                                 />
+                                {/* Cable Combs for tidy look */}
+                                <rect x="78%" y="45%" width="1.5%" height="10%" rx="1" fill="#111" />
                             </g>
                         )}
 
-                        {/* CPU Power Cable (Top Left routing) */}
+                        {/* CPU Power Cable (EPS 8-pin x 2) */}
                         {hasPart(ComponentType.MOBO) && hasPart(ComponentType.CPU) && (
                             <g filter="url(#cable-shadow)" className="animate-scale-in">
+                                 {/* Connector on Mobo Top Left */}
+                                 <rect x="18%" y="15%" width="6%" height="4%" fill="#111" rx="1" />
+
+                                 {/* Cable 1: From Top Grommet (15%, 5%) to Connector (20%, 15%) */}
                                 <path 
-                                    d="M 10% 5% Q 12% 12% 25% 20%" 
+                                    d="M 15% 5% Q 15% 12% 19% 15%" 
                                     fill="none" 
                                     stroke="url(#cable-gradient)" 
-                                    strokeWidth="5" 
+                                    strokeWidth="8" 
                                     strokeLinecap="round"
                                 />
                                 <path 
-                                    d="M 10% 5% Q 12% 12% 25% 20%" 
+                                    d="M 15% 5% Q 15% 12% 19% 15%" 
                                     fill="none" 
-                                    stroke="black" 
-                                    strokeWidth="5" 
-                                    strokeDasharray="1 2"
-                                    strokeOpacity="0.3"
+                                    stroke="url(#cable-braid)" 
+                                    strokeWidth="8" 
+                                    strokeLinecap="round"
+                                    opacity="0.5"
+                                />
+                                 {/* Cable 2: Slightly offset */}
+                                 <path 
+                                    d="M 17% 5% Q 17% 12% 22% 15%" 
+                                    fill="none" 
+                                    stroke="url(#cable-gradient)" 
+                                    strokeWidth="8" 
+                                    strokeLinecap="round"
                                 />
                             </g>
                         )}
 
-                        {/* GPU Power Cable (From bottom to GPU) */}
+                        {/* GPU Power Cables (PCIe 8-pin x 3) */}
                         {hasPart(ComponentType.GPU) && (
                             <g filter="url(#cable-shadow)" className="animate-scale-in">
+                                 {/* Cables rising from PSU Shroud Grommet (50%, 85%) to GPU side (55%, 65%) */}
+                                 
+                                 {/* Strand 1 */}
                                 <path 
-                                    d="M 55% 82% Q 55% 75% 50% 65%" 
+                                    d="M 48% 85% C 48% 75%, 45% 70%, 55% 65%" 
                                     fill="none" 
                                     stroke="url(#cable-gradient)" 
-                                    strokeWidth="8" 
+                                    strokeWidth="6" 
                                     strokeLinecap="round"
                                 />
-                                <path 
-                                    d="M 55% 82% Q 55% 75% 50% 65%" 
+                                 {/* Strand 2 */}
+                                 <path 
+                                    d="M 50% 85% C 50% 75%, 50% 70%, 58% 65%" 
                                     fill="none" 
-                                    stroke="black" 
-                                    strokeWidth="8" 
-                                    strokeDasharray="2 2"
-                                    strokeOpacity="0.3"
+                                    stroke="url(#cable-gradient)" 
+                                    strokeWidth="6" 
+                                    strokeLinecap="round"
                                 />
+                                {/* Strand 3 */}
+                                <path 
+                                    d="M 52% 85% C 52% 75%, 55% 70%, 61% 65%" 
+                                    fill="none" 
+                                    stroke="url(#cable-gradient)" 
+                                    strokeWidth="6" 
+                                    strokeLinecap="round"
+                                />
+                                
+                                {/* Connector Heads at GPU end */}
+                                <rect x="54%" y="63%" width="2%" height="4%" fill="#111" transform="rotate(-10 54 63)" />
+                                <rect x="57%" y="63%" width="2%" height="4%" fill="#111" transform="rotate(-10 57 63)" />
+                                <rect x="60%" y="63%" width="2%" height="4%" fill="#111" transform="rotate(-10 60 63)" />
+
+                                {/* Comb keeping them together */}
+                                 <path d="M 48% 75% L 54% 75%" stroke="#18181b" strokeWidth="8" strokeLinecap="round" transform="rotate(-5)" />
                             </g>
+                        )}
+                        
+                        {/* SATA Power (To Storage) */}
+                        {hasPart(ComponentType.STORAGE) && (
+                             <g filter="url(#cable-shadow)" className="animate-scale-in">
+                                {/* From ATX Grommet area down to Storage Cage (Top Right) */}
+                                <path 
+                                    d="M 85% 50% C 90% 50%, 92% 35%, 88% 25%" 
+                                    fill="none" 
+                                    stroke="url(#cable-gradient)" 
+                                    strokeWidth="10" 
+                                    strokeLinecap="round"
+                                />
+                                 {/* SATA Connector Head */}
+                                <rect x="85%" y="22%" width="8" height="12" rx="1" fill="#111" />
+                             </g>
                         )}
                     </svg>
                 )}
